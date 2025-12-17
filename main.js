@@ -29,21 +29,102 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Intersection Observer để hiện/ẩn khi scroll
+  // Intersection Observer để hiện/ẩn khi scroll với smooth transition
   const introSection = document.querySelector('.intro');
   if (introSection && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Lướt xuống - hiện
-          entry.target.classList.add('intro--visible');
+          // Lướt xuống - hiện với delay nhẹ để mượt hơn
+          requestAnimationFrame(() => {
+            entry.target.classList.add('intro--visible');
+          });
         } else {
           // Lướt lên - ẩn
-          entry.target.classList.remove('intro--visible');
+          requestAnimationFrame(() => {
+            entry.target.classList.remove('intro--visible');
+          });
         }
       });
-    }, { threshold: 0.15 });
+    }, { 
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
 
     observer.observe(introSection);
   }
+
+  // Topbar scroll effect - thay đổi style khi scroll
+  const topbar = document.querySelector('.topbar');
+  let lastScroll = 0;
+  let ticking = false;
+
+  function updateTopbar() {
+    const scrollY = window.scrollY;
+    
+    if (scrollY > 50) {
+      topbar.classList.add('scrolled');
+    } else {
+      topbar.classList.remove('scrolled');
+    }
+    
+    lastScroll = scrollY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateTopbar);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Smooth scroll cho các link navigation
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        const topbarHeight = topbar ? topbar.offsetHeight : 0;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - topbarHeight;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+  // Parallax effect nhẹ cho hero content
+  const heroContent = document.querySelector('.hero__content');
+  if (heroContent) {
+    let heroTicking = false;
+    
+    function updateHeroParallax() {
+      const scrollY = window.scrollY;
+      const heroSection = document.querySelector('.hero');
+      
+      if (heroSection && scrollY < heroSection.offsetHeight) {
+        const parallaxValue = scrollY * 0.3;
+        heroContent.style.transform = `translateY(${parallaxValue}px)`;
+      }
+      
+      heroTicking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!heroTicking) {
+        window.requestAnimationFrame(updateHeroParallax);
+        heroTicking = true;
+      }
+    }, { passive: true });
+  }
+
+  // Preload images để tránh layout shift
+  const imageUrls = [...new Set(images)];
+  imageUrls.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
 });
