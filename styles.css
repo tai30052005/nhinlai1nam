@@ -411,6 +411,231 @@ h2 {
 .event-type-cafe { background: rgba(255, 155, 242, 0.12); color: #ffe7fb; border-color: rgba(255, 155, 242, 0.5); }
 .event-type-party { background: rgba(255, 187, 122, 0.12); color: #ffeede; border-color: rgba(255, 187, 122, 0.5); }
 
+/* Intro Section - Lời nói đầu */
+.intro {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 120px 0;
+  background: var(--gradient);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+.intro--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro__gallery {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: space-around;
+  opacity: 0;
+  filter: blur(2px);
+  padding: 20px 0;
+  transition: opacity 1.5s ease-out 0.3s;
+}
+
+.intro--visible .intro__gallery {
+  opacity: 0.4;
+}
+
+.intro__gallery-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: slideHorizontal 40s linear infinite;
+}
+
+.intro__gallery-track--1 {
+  animation-direction: normal;
+}
+
+.intro__gallery-track--2 {
+  animation-direction: reverse;
+  animation-duration: 45s;
+  margin-left: -50%;
+}
+
+.intro__gallery-track--3 {
+  animation-direction: normal;
+  animation-duration: 50s;
+  margin-left: -25%;
+}
+
+.intro__gallery-item {
+  flex-shrink: 0;
+  width: 280px;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.intro__gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.intro__gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.intro__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    135deg,
+    rgba(5, 6, 18, 0.85) 0%,
+    rgba(8, 10, 28, 0.75) 50%,
+    rgba(5, 6, 18, 0.85) 100%
+  );
+  backdrop-filter: blur(1px);
+}
+
+.intro__content {
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+  padding: 0 24px;
+}
+
+.intro__text {
+  background: rgba(12, 14, 32, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 64px 56px;
+  backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow: 
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(122, 240, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;
+}
+
+.intro--visible .intro__text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro__quote {
+  font-size: clamp(18px, 2.5vw, 24px);
+  line-height: 1.8;
+  color: #f1f4fb;
+  text-align: center;
+  margin-bottom: 32px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  padding: 0 20px;
+}
+
+.intro__quote::before {
+  content: '"';
+  position: absolute;
+  left: -10px;
+  top: -20px;
+  font-size: 80px;
+  font-family: "Space Grotesk", serif;
+  color: rgba(122, 240, 255, 0.3);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.intro__quote::after {
+  content: '"';
+  position: absolute;
+  right: -10px;
+  bottom: -40px;
+  font-size: 80px;
+  font-family: "Space Grotesk", serif;
+  color: rgba(216, 107, 255, 0.3);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.intro__signature {
+  text-align: right;
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-top: 24px;
+  padding-right: 20px;
+}
+
+@keyframes slideHorizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 720px) {
+  .intro {
+    padding: 80px 0;
+    min-height: 70vh;
+  }
+
+  .intro__text {
+    padding: 40px 28px;
+    border-radius: 20px;
+  }
+
+  .intro__quote {
+    padding: 0 10px;
+    margin-bottom: 24px;
+  }
+
+  .intro__quote::before,
+  .intro__quote::after {
+    font-size: 50px;
+  }
+
+  .intro__quote::before {
+    left: -5px;
+    top: -15px;
+  }
+
+  .intro__quote::after {
+    right: -5px;
+    bottom: -30px;
+  }
+
+  .intro__gallery-item {
+    width: 200px;
+    height: 150px;
+  }
+
+  .intro__signature {
+    text-align: center;
+    padding-right: 0;
+  }
+
+  .intro__signature::before {
+    display: none;
+  }
+}
+
 @media (max-width: 720px) {
   .topbar__inner {
     padding: 12px 0;
