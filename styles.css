@@ -705,11 +705,20 @@ h2 {
   position: absolute;
   inset: 0;
   z-index: 1;
+  background: url('image/12anhem.jpg') center/cover no-repeat;
+  opacity: 0.3;
+  filter: blur(2px);
+}
+
+.characters__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(122, 240, 255, 0.08), transparent 40%),
-    radial-gradient(circle at 80% 50%, rgba(216, 107, 255, 0.08), transparent 40%),
-    var(--gradient);
-  opacity: 0.6;
+    radial-gradient(circle at 20% 50%, rgba(122, 240, 255, 0.1), transparent 40%),
+    radial-gradient(circle at 80% 50%, rgba(216, 107, 255, 0.1), transparent 40%),
+    linear-gradient(180deg, rgba(5, 6, 18, 0.6) 0%, rgba(5, 6, 18, 0.8) 100%);
+  z-index: 1;
 }
 
 .characters__header {
