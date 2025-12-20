@@ -441,6 +441,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const newTestimonialRef = push(testimonialsRef);
         await set(newTestimonialRef, testimonial);
         
+        // Xác định thông báo và animation dựa trên độ dài message
+        let successMessage = '';
+        let flameClass = '';
+        const messageLength = message.length;
+        
+        if (messageLength < 50) {
+          successMessage = 'Củi ni ngắn quá không cháy được';
+          flameClass = 'flame--weak';
+        } else if (messageLength >= 50 && messageLength <= 120) {
+          successMessage = 'Củi ni ấm rồi, tốt quá rồi';
+          flameClass = 'flame--medium';
+        } else {
+          successMessage = 'Củi to, đen, khô, quá tuyệt vời rồi. Cảm ơn tình cảm của bri, sự đóng góp của bri sẽ là vô cùng quan trọng cho giaohoi ❤';
+          flameClass = 'flame--strong';
+        }
+        
+        // Cập nhật thông báo thành công
+        const successMessageEl = testimonialsSuccess.querySelector('.testimonials__success-message');
+        if (successMessageEl) {
+          successMessageEl.textContent = successMessage;
+        }
+        
+        // Cập nhật animation củi lửa
+        const successIcon = document.getElementById('testimonialsSuccessIcon');
+        if (successIcon) {
+          // Xóa các class cũ
+          successIcon.querySelector('.flame').className = 'flame ' + flameClass;
+        }
+        
         // Hiển thị thông báo thành công
         testimonialsForm.style.display = 'none';
         testimonialsSuccess.style.display = 'block';

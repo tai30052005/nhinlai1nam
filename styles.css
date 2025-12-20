@@ -1644,19 +1644,187 @@ h2 {
 }
 
 .testimonials__success-icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  color: #0b0f1a;
-  font-weight: 700;
   margin: 0 auto 24px;
-  box-shadow: 0 0 30px rgba(122, 240, 255, 0.4);
+  position: relative;
   animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Flame Animation */
+.flame {
+  position: relative;
+  width: 80px;
+  height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.flame__particle {
+  position: absolute;
+  bottom: 0;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 150, 1) 0%,
+    rgba(255, 200, 0, 0.95) 20%,
+    rgba(255, 150, 0, 0.9) 40%,
+    rgba(255, 100, 0, 0.85) 60%,
+    rgba(255, 50, 0, 0.8) 80%,
+    rgba(200, 30, 0, 0.7) 100%
+  );
+  filter: blur(1.5px);
+  animation: flameFlicker 1.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.flame__particle:nth-child(1) {
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0s;
+  z-index: 3;
+}
+
+.flame__particle:nth-child(2) {
+  left: 35%;
+  transform: translateX(-50%) scale(0.85);
+  animation-delay: 0.2s;
+  opacity: 0.85;
+  z-index: 2;
+}
+
+.flame__particle:nth-child(3) {
+  left: 65%;
+  transform: translateX(-50%) scale(0.85);
+  animation-delay: 0.4s;
+  opacity: 0.85;
+  z-index: 2;
+}
+
+/* Weak Flame (< 50 chars) - Lửa nhỏ, yếu */
+.flame--weak {
+  width: 40px;
+  height: 50px;
+}
+
+.flame--weak .flame__particle {
+  width: 14px;
+  height: 20px;
+  opacity: 0.5;
+  animation-duration: 2.5s;
+  box-shadow: 0 0 6px rgba(255, 150, 0, 0.3);
+}
+
+.flame--weak .flame__particle:nth-child(1) {
+  width: 12px;
+  height: 18px;
+}
+
+.flame--weak .flame__particle:nth-child(2),
+.flame--weak .flame__particle:nth-child(3) {
+  display: none;
+}
+
+/* Medium Flame (50-120 chars) - Lửa ấm, vừa */
+.flame--medium {
+  width: 60px;
+  height: 75px;
+}
+
+.flame--medium .flame__particle {
+  width: 20px;
+  height: 35px;
+  opacity: 0.85;
+  animation-duration: 1.3s;
+  box-shadow: 0 0 12px rgba(255, 150, 0, 0.5);
+}
+
+.flame--medium .flame__particle:nth-child(1) {
+  width: 18px;
+  height: 32px;
+}
+
+.flame--medium .flame__particle:nth-child(2),
+.flame--medium .flame__particle:nth-child(3) {
+  width: 14px;
+  height: 25px;
+}
+
+/* Strong Flame (> 120 chars) - Lửa to, mạnh */
+.flame--strong {
+  width: 90px;
+  height: 120px;
+}
+
+.flame--strong .flame__particle {
+  width: 28px;
+  height: 55px;
+  opacity: 1;
+  animation-duration: 0.9s;
+  box-shadow: 
+    0 0 25px rgba(255, 255, 150, 0.9),
+    0 0 45px rgba(255, 200, 0, 0.7),
+    0 0 65px rgba(255, 150, 0, 0.5),
+    0 0 85px rgba(255, 100, 0, 0.3);
+}
+
+.flame--strong .flame__particle:nth-child(1) {
+  width: 26px;
+  height: 52px;
+}
+
+.flame--strong .flame__particle:nth-child(2),
+.flame--strong .flame__particle:nth-child(3) {
+  width: 22px;
+  height: 45px;
+  opacity: 0.95;
+}
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) scaleY(1) scaleX(1) rotate(0deg);
+    opacity: 1;
+  }
+  10% {
+    transform: translateX(-50%) translateY(-1px) scaleY(1.05) scaleX(0.98) rotate(-1deg);
+    opacity: 0.95;
+  }
+  20% {
+    transform: translateX(-50%) translateY(-3px) scaleY(0.98) scaleX(1.02) rotate(1deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(-50%) translateY(-2px) scaleY(1.02) scaleX(0.99) rotate(-0.5deg);
+    opacity: 0.98;
+  }
+  40% {
+    transform: translateX(-50%) translateY(-4px) scaleY(0.96) scaleX(1.03) rotate(1.5deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) translateY(-5px) scaleY(1.03) scaleX(0.97) rotate(-1deg);
+    opacity: 0.97;
+  }
+  60% {
+    transform: translateX(-50%) translateY(-3px) scaleY(0.99) scaleX(1.01) rotate(0.5deg);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(-50%) translateY(-2px) scaleY(1.01) scaleX(0.99) rotate(-0.8deg);
+    opacity: 0.99;
+  }
+  80% {
+    transform: translateX(-50%) translateY(-4px) scaleY(0.97) scaleX(1.02) rotate(1.2deg);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(-50%) translateY(-1px) scaleY(1.04) scaleX(0.98) rotate(-0.7deg);
+    opacity: 0.96;
+  }
 }
 
 @keyframes scaleIn {
