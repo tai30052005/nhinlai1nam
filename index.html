@@ -8,6 +8,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    
+      // Firebase config - BẠN CẦN THAY ĐỔI CÁC GIÁ TRỊ NÀY SAU KHI TẠO FIREBASE PROJECT
+      const firebaseConfig = {
+        apiKey: "AIzaSyBzuFwOWrWwfJ8qcOCwwE4Dy6loyHwCcKk",
+        authDomain: "giaohoigaynhieu-tamsu.firebaseapp.com",
+        databaseURL: "https://giaohoigaynhieu-tamsu-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "giaohoigaynhieu-tamsu",
+        storageBucket: "giaohoigaynhieu-tamsu.firebasestorage.app",
+        messagingSenderId: "389812768330",
+        appId: "1:389812768330:web:c9663ca3f2754b49e560b3"
+      };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    
+    // Export để dùng trong main.js
+    window.firebaseDatabase = database;
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -170,6 +193,17 @@
           <p class="testimonials__success-message">
             Tâm sự của bạn đã được gửi thành công. Ngọn lửa tình bạn sẽ mãi cháy sáng nhờ những tình cảm chân thành này.
           </p>
+        </div>
+      </div>
+      
+      <!-- Danh sách tâm sự -->
+      <div class="testimonials__messages" id="testimonialsMessages">
+        <div class="testimonials__messages-header">
+          <h3 class="testimonials__messages-title">Những lời tâm sự từ giaohoi</h3>
+          <p class="testimonials__messages-subtitle">Cùng đọc những tình cảm chân thành từ các thành viên</p>
+        </div>
+        <div class="testimonials__messages-list" id="testimonialsMessagesList">
+          <div class="testimonials__loading">Đang tải...</div>
         </div>
       </div>
     </div>

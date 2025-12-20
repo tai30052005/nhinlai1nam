@@ -373,9 +373,25 @@ document.addEventListener('DOMContentLoaded', function() {
     observer.observe(testimonialsSection);
   }
 
-  // Xử lý form tâm sự
+  // Xử lý form tâm sự với Firebase
   const testimonialsForm = document.getElementById('testimonialsForm');
   const testimonialsSuccess = document.getElementById('testimonialsSuccess');
+  
+  // Đợi Firebase load xong
+  function waitForFirebase() {
+    return new Promise((resolve) => {
+      if (window.firebaseDatabase) {
+        resolve(window.firebaseDatabase);
+      } else {
+        const checkInterval = setInterval(() => {
+          if (window.firebaseDatabase) {
+            clearInterval(checkInterval);
+            resolve(window.firebaseDatabase);
+          }
+        }, 100);
+      }
+    });
+  }
   
   if (testimonialsForm) {
     testimonialsForm.addEventListener('submit', async function(e) {
@@ -392,24 +408,38 @@ document.addEventListener('DOMContentLoaded', function() {
       submitLoader.style.display = 'inline-flex';
       
       try {
+        // Đợi Firebase sẵn sàng
+        const database = await waitForFirebase();
+        const { ref, push, set } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+        
         // Lấy dữ liệu từ form
-        const message = formData.get('message');
+        const message = formData.get('message').trim();
         
-        // Tạo nội dung email
-        const emailBody = `
-Tâm sự (Ẩn danh):
-${message}
-        `.trim();
+        if (!message) {
+          alert('Vui lòng nhập tâm sự của bạn!');
+          submitButton.disabled = false;
+          submitText.style.display = 'inline';
+          submitLoader.style.display = 'none';
+          return;
+        }
         
-        // Sử dụng mailto để gửi email (hoặc có thể tích hợp với service khác)
-        // Nếu muốn dùng Formspree, thay đổi action của form
-        const mailtoLink = `mailto:your-email@example.com?subject=Tâm sự từ ${name}&body=${encodeURIComponent(emailBody)}`;
+        // Tạo object tâm sự
+        const testimonial = {
+          message: message,
+          timestamp: Date.now(),
+          date: new Date().toLocaleString('vi-VN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        };
         
-        // Mở email client (hoặc có thể dùng fetch để gửi đến API)
-        // window.location.href = mailtoLink;
-        
-        // Giả lập delay để UX tốt hơn
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Lưu vào Firebase
+        const testimonialsRef = ref(database, 'testimonials');
+        const newTestimonialRef = push(testimonialsRef);
+        await set(newTestimonialRef, testimonial);
         
         // Hiển thị thông báo thành công
         testimonialsForm.style.display = 'none';
@@ -421,9 +451,15 @@ ${message}
         // Scroll đến success message
         testimonialsSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
+        // Tự động ẩn success message sau 5 giây và hiện lại form
+        setTimeout(() => {
+          testimonialsSuccess.style.display = 'none';
+          testimonialsForm.style.display = 'block';
+        }, 5000);
+        
       } catch (error) {
         console.error('Error submitting form:', error);
-        alert('Có lỗi xảy ra khi gửi tâm sự. Vui lòng thử lại sau.');
+        alert('Có lỗi xảy ra khi gửi tâm sự. Vui lòng kiểm tra kết nối Firebase và thử lại sau.');
         
         // Reset button
         submitButton.disabled = false;
@@ -432,4 +468,71 @@ ${message}
       }
     });
   }
+  
+  // Load và hiển thị danh sách tâm sự từ Firebase
+  async function loadTestimonials() {
+    const messagesList = document.getElementById('testimonialsMessagesList');
+    if (!messagesList) return;
+    
+    try {
+      // Đợi Firebase sẵn sàng
+      const database = await waitForFirebase();
+      const { ref, onValue, off } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+      
+      const testimonialsRef = ref(database, 'testimonials');
+      
+      // Lắng nghe thay đổi realtime
+      onValue(testimonialsRef, (snapshot) => {
+        const data = snapshot.val();
+        
+        if (!data || Object.keys(data).length === 0) {
+          messagesList.innerHTML = `
+            <div class="testimonials__empty">
+              <p>Chưa có tâm sự nào. Hãy là người đầu tiên chia sẻ nhé! 💫</p>
+            </div>
+          `;
+          return;
+        }
+        
+        // Chuyển đổi object thành array và sắp xếp theo timestamp (mới nhất trước)
+        const testimonials = Object.entries(data)
+          .map(([id, testimonial]) => ({
+            id,
+            ...testimonial
+          }))
+          .sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Render danh sách
+        messagesList.innerHTML = testimonials.map((testimonial, index) => `
+          <div class="testimonial-item" style="animation-delay: ${index * 0.1}s">
+            <div class="testimonial-item__content">
+              <p class="testimonial-item__message">"${testimonial.message}"</p>
+              <div class="testimonial-item__meta">
+                <span class="testimonial-item__author">Ẩn danh</span>
+                <span class="testimonial-item__date">${testimonial.date}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }, (error) => {
+        console.error('Error loading testimonials:', error);
+        messagesList.innerHTML = `
+          <div class="testimonials__error">
+            <p>Không thể tải tâm sự. Vui lòng kiểm tra kết nối Firebase.</p>
+          </div>
+        `;
+      });
+      
+    } catch (error) {
+      console.error('Error setting up Firebase listener:', error);
+      messagesList.innerHTML = `
+        <div class="testimonials__error">
+          <p>Lỗi kết nối Firebase. Vui lòng kiểm tra cấu hình.</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Load testimonials khi page load
+  loadTestimonials();
 });
