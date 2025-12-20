@@ -469,6 +469,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Pagination state
+  let currentPage = 1;
+  const itemsPerPage = 4;
+  let allTestimonials = [];
+  
   // Load và hiển thị danh sách tâm sự từ Firebase
   async function loadTestimonials() {
     const messagesList = document.getElementById('testimonialsMessagesList');
@@ -477,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       // Đợi Firebase sẵn sàng
       const database = await waitForFirebase();
-      const { ref, onValue, off } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+      const { ref, onValue } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
       
       const testimonialsRef = ref(database, 'testimonials');
       
@@ -491,29 +496,25 @@ document.addEventListener('DOMContentLoaded', function() {
               <p>Chưa có tâm sự nào. Hãy là người đầu tiên chia sẻ nhé! 💫</p>
             </div>
           `;
+          // Ẩn pagination nếu không có data
+          const pagination = document.getElementById('testimonialsPagination');
+          if (pagination) pagination.style.display = 'none';
           return;
         }
         
         // Chuyển đổi object thành array và sắp xếp theo timestamp (mới nhất trước)
-        const testimonials = Object.entries(data)
+        allTestimonials = Object.entries(data)
           .map(([id, testimonial]) => ({
             id,
             ...testimonial
           }))
           .sort((a, b) => b.timestamp - a.timestamp);
         
-        // Render danh sách
-        messagesList.innerHTML = testimonials.map((testimonial, index) => `
-          <div class="testimonial-item" style="animation-delay: ${index * 0.1}s">
-            <div class="testimonial-item__content">
-              <p class="testimonial-item__message">"${testimonial.message}"</p>
-              <div class="testimonial-item__meta">
-                <span class="testimonial-item__author">Ẩn danh</span>
-                <span class="testimonial-item__date">${testimonial.date}</span>
-              </div>
-            </div>
-          </div>
-        `).join('');
+        // Reset về trang 1 khi có data mới
+        currentPage = 1;
+        
+        // Render với pagination
+        renderTestimonials();
       }, (error) => {
         console.error('Error loading testimonials:', error);
         messagesList.innerHTML = `
@@ -521,6 +522,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>Không thể tải tâm sự. Vui lòng kiểm tra kết nối Firebase.</p>
           </div>
         `;
+        const pagination = document.getElementById('testimonialsPagination');
+        if (pagination) pagination.style.display = 'none';
       });
       
     } catch (error) {
@@ -530,9 +533,128 @@ document.addEventListener('DOMContentLoaded', function() {
           <p>Lỗi kết nối Firebase. Vui lòng kiểm tra cấu hình.</p>
         </div>
       `;
+      const pagination = document.getElementById('testimonialsPagination');
+      if (pagination) pagination.style.display = 'none';
+    }
+  }
+  
+  // Render testimonials với pagination
+  function renderTestimonials() {
+    const messagesList = document.getElementById('testimonialsMessagesList');
+    const pagination = document.getElementById('testimonialsPagination');
+    if (!messagesList) return;
+    
+    // Tính toán pagination
+    const totalPages = Math.ceil(allTestimonials.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentTestimonials = allTestimonials.slice(startIndex, endIndex);
+    
+    // Render danh sách
+    if (currentTestimonials.length === 0) {
+      messagesList.innerHTML = `
+        <div class="testimonials__empty">
+          <p>Không có tâm sự nào ở trang này.</p>
+        </div>
+      `;
+    } else {
+      messagesList.innerHTML = currentTestimonials.map((testimonial, index) => `
+        <div class="testimonial-item" style="animation-delay: ${index * 0.1}s">
+          <div class="testimonial-item__content">
+            <p class="testimonial-item__message">"${testimonial.message}"</p>
+            <div class="testimonial-item__meta">
+              <span class="testimonial-item__author">Ẩn danh</span>
+              <span class="testimonial-item__date">${testimonial.date}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Render pagination
+    if (pagination) {
+      if (totalPages <= 1) {
+        pagination.style.display = 'none';
+      } else {
+        pagination.style.display = 'flex';
+        pagination.innerHTML = `
+          <button 
+            class="pagination__btn pagination__btn--prev" 
+            id="prevPageBtn"
+            ${currentPage === 1 ? 'disabled' : ''}
+          >
+            ← Trước
+          </button>
+          <div class="pagination__info">
+            <span class="pagination__current">${currentPage}</span>
+            <span class="pagination__separator">/</span>
+            <span class="pagination__total">${totalPages}</span>
+          </div>
+          <button 
+            class="pagination__btn pagination__btn--next" 
+            id="nextPageBtn"
+            ${currentPage === totalPages ? 'disabled' : ''}
+          >
+            Sau →
+          </button>
+        `;
+        
+        // Event listeners cho pagination
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+              currentPage--;
+              renderTestimonials();
+              // Scroll lên đầu danh sách
+              messagesList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+        
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+              currentPage++;
+              renderTestimonials();
+              // Scroll lên đầu danh sách
+              messagesList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+      }
     }
   }
   
   // Load testimonials khi page load
   loadTestimonials();
+  
+  // Toggle giữa form và danh sách tâm sự
+  const viewTestimonialsBtn = document.getElementById('viewTestimonialsBtn');
+  const backToFormBtn = document.getElementById('backToFormBtn');
+  const testimonialsFormWrapper = document.querySelector('.testimonials__form-wrapper');
+  const testimonialsMessages = document.getElementById('testimonialsMessages');
+  
+  if (viewTestimonialsBtn && testimonialsMessages) {
+    viewTestimonialsBtn.addEventListener('click', () => {
+      testimonialsFormWrapper.style.display = 'none';
+      testimonialsSuccess.style.display = 'none';
+      testimonialsMessages.style.display = 'block';
+      
+      // Scroll đến phần hiển thị tâm sự
+      testimonialsMessages.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+  
+  if (backToFormBtn && testimonialsFormWrapper) {
+    backToFormBtn.addEventListener('click', () => {
+      testimonialsMessages.style.display = 'none';
+      testimonialsFormWrapper.style.display = 'block';
+      
+      // Scroll đến phần form
+      testimonialsFormWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 });

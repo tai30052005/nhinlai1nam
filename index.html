@@ -176,15 +176,20 @@
             ></textarea>
           </div>
           
-          <button type="submit" class="testimonials__submit btn btn-primary">
-            <span class="testimonials__submit-text">Gửi tâm sự</span>
-            <span class="testimonials__submit-loader" style="display: none;">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
-                <path d="M10 2 A8 8 0 0 1 18 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </span>
-          </button>
+          <div class="testimonials__form-actions">
+            <button type="submit" class="testimonials__submit btn btn-primary">
+              <span class="testimonials__submit-text">Gửi tâm sự</span>
+              <span class="testimonials__submit-loader" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+                  <path d="M10 2 A8 8 0 0 1 18 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+            <button type="button" class="testimonials__view-btn btn btn-ghost" id="viewTestimonialsBtn">
+              Xem tâm sự của mọi người
+            </button>
+          </div>
         </form>
         
         <div class="testimonials__success" id="testimonialsSuccess" style="display: none;">
@@ -197,13 +202,21 @@
       </div>
       
       <!-- Danh sách tâm sự -->
-      <div class="testimonials__messages" id="testimonialsMessages">
+      <div class="testimonials__messages" id="testimonialsMessages" style="display: none;">
         <div class="testimonials__messages-header">
           <h3 class="testimonials__messages-title">Những lời tâm sự từ giaohoi</h3>
           <p class="testimonials__messages-subtitle">Cùng đọc những tình cảm chân thành từ các thành viên</p>
         </div>
         <div class="testimonials__messages-list" id="testimonialsMessagesList">
           <div class="testimonials__loading">Đang tải...</div>
+        </div>
+        <div class="testimonials__pagination" id="testimonialsPagination" style="display: none;">
+          <!-- Pagination sẽ được tạo bằng JavaScript -->
+        </div>
+        <div class="testimonials__messages-actions">
+          <button type="button" class="testimonials__back-btn" id="backToFormBtn">
+            ← Quay lại
+          </button>
         </div>
       </div>
     </div>
