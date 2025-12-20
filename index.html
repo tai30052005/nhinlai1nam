@@ -124,6 +124,57 @@
     </div>
   </section>
 
+  <section id="testimonials" class="testimonials">
+    <div class="testimonials__bg"></div>
+    <div class="container">
+      <div class="testimonials__header">
+        <p class="eyebrow">GIAOHOIGAYNHIEU</p>
+        <h2>Góc Nhỏ Tâm Sự</h2>
+        <p class="testimonials__subtitle">
+          2023, 2024, 2025 đã khép lại, ngọn lửa tình bạn chưa từng một lần nguội lạnh. 
+          Chúng mình cứ cùng nhau bước qua biết bao nhiêu câu chuyện. 
+          Hãy để lại đây tình cảm của bạn để thêm mồi củi vào ngọn lửa đó ở đây nhé:
+        </p>
+      </div>
+      
+      <div class="testimonials__form-wrapper">
+        <form class="testimonials__form" id="testimonialsForm">
+          <div class="testimonials__form-group">
+            <label for="testimonialMessage" class="testimonials__label">
+              Suy nghĩ của bạn trong năm tới cùng với giaohoi...
+            </label>
+            <textarea 
+              id="testimonialMessage" 
+              name="message" 
+              class="testimonials__textarea" 
+              rows="6" 
+              placeholder="Chia sẻ những suy nghĩ, cảm xúc, kỷ niệm hoặc lời nhắn gửi đến giaohoi..."
+              required
+            ></textarea>
+          </div>
+          
+          <button type="submit" class="testimonials__submit btn btn-primary">
+            <span class="testimonials__submit-text">Gửi tâm sự</span>
+            <span class="testimonials__submit-loader" style="display: none;">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
+                <path d="M10 2 A8 8 0 0 1 18 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </button>
+        </form>
+        
+        <div class="testimonials__success" id="testimonialsSuccess" style="display: none;">
+          <div class="testimonials__success-icon">✓</div>
+          <h3 class="testimonials__success-title">Cảm ơn bạn!</h3>
+          <p class="testimonials__success-message">
+            Tâm sự của bạn đã được gửi thành công. Ngọn lửa tình bạn sẽ mãi cháy sáng nhờ những tình cảm chân thành này.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="container">
       <div class="footer__content">

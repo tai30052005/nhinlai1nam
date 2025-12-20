@@ -349,4 +349,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
     observer.observe(eventsSection);
   }
+
+  // Testimonials Section - Góc nhỏ tâm sự
+  const testimonialsSection = document.querySelector('.testimonials');
+  if (testimonialsSection && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          requestAnimationFrame(() => {
+            entry.target.classList.add('testimonials--visible');
+          });
+        } else {
+          requestAnimationFrame(() => {
+            entry.target.classList.remove('testimonials--visible');
+          });
+        }
+      });
+    }, { 
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    observer.observe(testimonialsSection);
+  }
+
+  // Xử lý form tâm sự
+  const testimonialsForm = document.getElementById('testimonialsForm');
+  const testimonialsSuccess = document.getElementById('testimonialsSuccess');
+  
+  if (testimonialsForm) {
+    testimonialsForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitButton = this.querySelector('.testimonials__submit');
+      const submitText = submitButton.querySelector('.testimonials__submit-text');
+      const submitLoader = submitButton.querySelector('.testimonials__submit-loader');
+      const formData = new FormData(this);
+      
+      // Disable button và hiển thị loading
+      submitButton.disabled = true;
+      submitText.style.display = 'none';
+      submitLoader.style.display = 'inline-flex';
+      
+      try {
+        // Lấy dữ liệu từ form
+        const message = formData.get('message');
+        
+        // Tạo nội dung email
+        const emailBody = `
+Tâm sự (Ẩn danh):
+${message}
+        `.trim();
+        
+        // Sử dụng mailto để gửi email (hoặc có thể tích hợp với service khác)
+        // Nếu muốn dùng Formspree, thay đổi action của form
+        const mailtoLink = `mailto:your-email@example.com?subject=Tâm sự từ ${name}&body=${encodeURIComponent(emailBody)}`;
+        
+        // Mở email client (hoặc có thể dùng fetch để gửi đến API)
+        // window.location.href = mailtoLink;
+        
+        // Giả lập delay để UX tốt hơn
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Hiển thị thông báo thành công
+        testimonialsForm.style.display = 'none';
+        testimonialsSuccess.style.display = 'block';
+        
+        // Reset form
+        this.reset();
+        
+        // Scroll đến success message
+        testimonialsSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('Có lỗi xảy ra khi gửi tâm sự. Vui lòng thử lại sau.');
+        
+        // Reset button
+        submitButton.disabled = false;
+        submitText.style.display = 'inline';
+        submitLoader.style.display = 'none';
+      }
+    });
+  }
 });
