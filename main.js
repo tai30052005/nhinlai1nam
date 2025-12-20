@@ -448,6 +448,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset form
         this.reset();
         
+        // Reset button state
+        submitButton.disabled = false;
+        submitText.style.display = 'inline';
+        submitLoader.style.display = 'none';
+        
         // Scroll đến success message
         testimonialsSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
@@ -636,11 +641,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const backToFormBtn = document.getElementById('backToFormBtn');
   const testimonialsFormWrapper = document.querySelector('.testimonials__form-wrapper');
   const testimonialsMessages = document.getElementById('testimonialsMessages');
+  const testimonialsHeader = document.querySelector('.testimonials__header');
   
   if (viewTestimonialsBtn && testimonialsMessages) {
     viewTestimonialsBtn.addEventListener('click', () => {
       testimonialsFormWrapper.style.display = 'none';
       testimonialsSuccess.style.display = 'none';
+      if (testimonialsHeader) testimonialsHeader.style.display = 'none';
       testimonialsMessages.style.display = 'block';
       
       // Scroll đến phần hiển thị tâm sự
@@ -652,6 +659,7 @@ document.addEventListener('DOMContentLoaded', function() {
     backToFormBtn.addEventListener('click', () => {
       testimonialsMessages.style.display = 'none';
       testimonialsFormWrapper.style.display = 'block';
+      if (testimonialsHeader) testimonialsHeader.style.display = 'block';
       
       // Scroll đến phần form
       testimonialsFormWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });

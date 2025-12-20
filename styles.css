@@ -1702,6 +1702,10 @@ h2 {
   margin-bottom: 48px;
 }
 
+.testimonials__messages-header .eyebrow {
+  margin-bottom: 12px;
+}
+
 .testimonials__messages-title {
   font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: clamp(28px, 4vw, 36px);
