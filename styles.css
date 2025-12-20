@@ -1641,17 +1641,54 @@ h2 {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   text-align: center;
   animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: visible;
+}
+
+.testimonials__success::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, 
+    rgba(122, 240, 255, 0.1) 0%,
+    rgba(216, 107, 255, 0.1) 50%,
+    rgba(122, 240, 255, 0.1) 100%
+  );
+  z-index: -1;
+  opacity: 0.3;
+  animation: successGlow 3s ease-in-out infinite;
+}
+
+@keyframes successGlow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .testimonials__success-icon {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 24px;
+  margin: 0 auto 32px;
   position: relative;
   animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Fire Container */
+.fire-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Flame Animation */
@@ -1663,6 +1700,8 @@ h2 {
   align-items: flex-end;
   justify-content: center;
   margin: 0 auto;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px rgba(255, 200, 0, 0.5));
 }
 
 .flame__particle {
@@ -1707,16 +1746,17 @@ h2 {
 
 /* Weak Flame (< 50 chars) - Lửa nhỏ, yếu */
 .flame--weak {
-  width: 40px;
-  height: 50px;
+  width: 45px;
+  height: 55px;
+  filter: drop-shadow(0 0 6px rgba(255, 150, 0, 0.4));
 }
 
 .flame--weak .flame__particle {
   width: 14px;
   height: 20px;
-  opacity: 0.5;
+  opacity: 0.6;
   animation-duration: 2.5s;
-  box-shadow: 0 0 6px rgba(255, 150, 0, 0.3);
+  box-shadow: 0 0 8px rgba(255, 150, 0, 0.4);
 }
 
 .flame--weak .flame__particle:nth-child(1) {
@@ -1730,17 +1770,18 @@ h2 {
 }
 
 /* Medium Flame (50-120 chars) - Lửa ấm, vừa */
-.flame--medium {
-  width: 60px;
-  height: 75px;
+.fire-container .flame--medium {
+  width: 65px;
+  height: 80px;
+  filter: drop-shadow(0 0 12px rgba(255, 200, 0, 0.6));
 }
 
 .flame--medium .flame__particle {
   width: 20px;
   height: 35px;
-  opacity: 0.85;
+  opacity: 0.9;
   animation-duration: 1.3s;
-  box-shadow: 0 0 12px rgba(255, 150, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 150, 0, 0.6);
 }
 
 .flame--medium .flame__particle:nth-child(1) {
@@ -1750,37 +1791,39 @@ h2 {
 
 .flame--medium .flame__particle:nth-child(2),
 .flame--medium .flame__particle:nth-child(3) {
-  width: 14px;
-  height: 25px;
+  width: 15px;
+  height: 28px;
+  opacity: 0.85;
 }
 
 /* Strong Flame (> 120 chars) - Lửa to, mạnh */
-.flame--strong {
-  width: 90px;
-  height: 120px;
+.fire-container .flame--strong {
+  width: 95px;
+  height: 125px;
+  filter: drop-shadow(0 0 20px rgba(255, 200, 0, 0.8));
 }
 
 .flame--strong .flame__particle {
-  width: 28px;
-  height: 55px;
+  width: 30px;
+  height: 60px;
   opacity: 1;
   animation-duration: 0.9s;
   box-shadow: 
-    0 0 25px rgba(255, 255, 150, 0.9),
-    0 0 45px rgba(255, 200, 0, 0.7),
-    0 0 65px rgba(255, 150, 0, 0.5),
-    0 0 85px rgba(255, 100, 0, 0.3);
+    0 0 30px rgba(255, 255, 150, 1),
+    0 0 50px rgba(255, 200, 0, 0.8),
+    0 0 70px rgba(255, 150, 0, 0.6),
+    0 0 90px rgba(255, 100, 0, 0.4);
 }
 
 .flame--strong .flame__particle:nth-child(1) {
-  width: 26px;
-  height: 52px;
+  width: 28px;
+  height: 58px;
 }
 
 .flame--strong .flame__particle:nth-child(2),
 .flame--strong .flame__particle:nth-child(3) {
-  width: 22px;
-  height: 45px;
+  width: 24px;
+  height: 50px;
   opacity: 0.95;
 }
 
@@ -1825,6 +1868,271 @@ h2 {
     transform: translateX(-50%) translateY(-1px) scaleY(1.04) scaleX(0.98) rotate(-0.7deg);
     opacity: 0.96;
   }
+}
+
+/* Wood Logs */
+.wood-logs {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: -5px;
+  z-index: 1;
+}
+
+.wood-log {
+  position: relative;
+  background: linear-gradient(135deg,
+    rgba(101, 67, 33, 0.9) 0%,
+    rgba(139, 90, 43, 0.95) 30%,
+    rgba(101, 67, 33, 0.9) 60%,
+    rgba(80, 50, 25, 0.85) 100%
+  );
+  border-radius: 2px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  animation: woodGlow 3s ease-in-out infinite;
+}
+
+.wood-log--1 {
+  width: 26px;
+  height: 10px;
+  transform: rotate(-18deg);
+  animation-delay: 0s;
+}
+
+.wood-log--2 {
+  width: 32px;
+  height: 12px;
+  transform: rotate(3deg);
+  animation-delay: 0.5s;
+  z-index: 2;
+}
+
+.wood-log--3 {
+  width: 24px;
+  height: 10px;
+  transform: rotate(22deg);
+  animation-delay: 1s;
+}
+
+/* Wood glow effect based on flame intensity */
+.fire-container--weak .wood-logs .wood-log {
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 0 4px rgba(255, 150, 0, 0.2);
+}
+
+.fire-container--medium .wood-logs .wood-log {
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 0 8px rgba(255, 150, 0, 0.4),
+    0 0 12px rgba(255, 100, 0, 0.2);
+}
+
+.fire-container--strong .wood-logs .wood-log {
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 0 12px rgba(255, 200, 0, 0.6),
+    0 0 20px rgba(255, 150, 0, 0.4),
+    0 0 30px rgba(255, 100, 0, 0.2);
+}
+
+@keyframes woodGlow {
+  0%, 100% {
+    opacity: 0.9;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.1);
+  }
+}
+
+/* Sparkles/Particles xung quanh lửa */
+.fire-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 200, 1), rgba(255, 200, 0, 0.8));
+  box-shadow: 0 0 6px rgba(255, 200, 0, 0.8);
+  animation: sparkleFloat 3s ease-in-out infinite;
+}
+
+.sparkle--1 {
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.sparkle--2 {
+  top: 15%;
+  right: 25%;
+  animation-delay: 0.5s;
+}
+
+.sparkle--3 {
+  top: 25%;
+  left: 15%;
+  animation-delay: 1s;
+}
+
+.sparkle--4 {
+  top: 20%;
+  right: 20%;
+  animation-delay: 1.5s;
+}
+
+.sparkle--5 {
+  top: 30%;
+  left: 30%;
+  animation-delay: 2s;
+}
+
+.sparkle--6 {
+  top: 35%;
+  right: 15%;
+  animation-delay: 2.5s;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translateY(-8px) translateX(4px) scale(1.2);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-12px) translateX(-3px) scale(0.9);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-6px) translateX(5px) scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Smoke effect */
+.fire-smoke {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.smoke {
+  position: absolute;
+  bottom: 0;
+  width: 20px;
+  height: 30px;
+  background: radial-gradient(ellipse at center, 
+    rgba(200, 200, 200, 0.3) 0%,
+    rgba(150, 150, 150, 0.2) 40%,
+    transparent 70%
+  );
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  filter: blur(8px);
+  animation: smokeRise 4s ease-out infinite;
+}
+
+.smoke--1 {
+  left: 40%;
+  animation-delay: 0s;
+}
+
+.smoke--2 {
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 1s;
+  width: 24px;
+  height: 35px;
+}
+
+.smoke--3 {
+  left: 60%;
+  animation-delay: 2s;
+}
+
+@keyframes smokeRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-20px) translateX(5px) scale(1.3);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-50px) translateX(-5px) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Adjust sparkles based on flame intensity */
+.fire-container--weak .sparkle {
+  width: 2px;
+  height: 2px;
+  opacity: 0.4;
+  animation-duration: 4s;
+}
+
+.fire-container--weak .smoke {
+  opacity: 0.2;
+  animation-duration: 5s;
+}
+
+.fire-container--medium .sparkle {
+  width: 3px;
+  height: 3px;
+  opacity: 0.7;
+  animation-duration: 3s;
+}
+
+.fire-container--medium .smoke {
+  opacity: 0.35;
+  animation-duration: 4s;
+}
+
+.fire-container--strong .sparkle {
+  width: 5px;
+  height: 5px;
+  opacity: 1;
+  animation-duration: 2s;
+  box-shadow: 0 0 10px rgba(255, 200, 0, 1);
+}
+
+.fire-container--strong .smoke {
+  opacity: 0.5;
+  animation-duration: 3s;
+  width: 28px;
+  height: 40px;
+}
+
+.fire-container--strong .smoke--2 {
+  width: 32px;
+  height: 45px;
 }
 
 @keyframes scaleIn {
@@ -2622,10 +2930,39 @@ h2 {
   }
 
   .testimonials__success-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 32px;
-    margin-bottom: 20px;
+    width: 100px;
+    height: 120px;
+    margin-bottom: 24px;
+  }
+  
+  .flame--weak {
+    width: 40px;
+    height: 50px;
+  }
+  
+  .flame--medium {
+    width: 55px;
+    height: 70px;
+  }
+  
+  .flame--strong {
+    width: 80px;
+    height: 110px;
+  }
+  
+  .sparkle {
+    width: 3px;
+    height: 3px;
+  }
+  
+  .fire-container--weak .sparkle {
+    width: 2px;
+    height: 2px;
+  }
+  
+  .fire-container--strong .sparkle {
+    width: 4px;
+    height: 4px;
   }
 
   .testimonials__success-title {

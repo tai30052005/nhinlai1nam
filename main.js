@@ -466,8 +466,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Cập nhật animation củi lửa
         const successIcon = document.getElementById('testimonialsSuccessIcon');
         if (successIcon) {
-          // Xóa các class cũ
-          successIcon.querySelector('.flame').className = 'flame ' + flameClass;
+          const fireContainer = successIcon.querySelector('.fire-container');
+          if (fireContainer) {
+            // Xóa các class cũ và thêm class mới
+            fireContainer.className = 'fire-container fire-container--' + flameClass.replace('flame--', '');
+            const flame = fireContainer.querySelector('.flame');
+            if (flame) {
+              flame.className = 'flame ' + flameClass;
+            }
+          }
         }
         
         // Hiển thị thông báo thành công
